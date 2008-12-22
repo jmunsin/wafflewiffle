@@ -3,6 +3,7 @@ require 'sinatra'
 require 'bluecloth'
 
 pvdir="/home/jm/code/photoviewer/public"
+pvdatadir="/home/jm/code/photoviewer/data"
 
 def get_dirs(dir, sub)
   if sub
@@ -45,6 +46,12 @@ end
 
 get '/' do
   get_page(pvdir)
+end
+
+get '/data/*.jpg' do
+  f = File.open(pvdatadir + "/" + params["splat"].join("/") + ".jpg")
+  content_type 'image/jpg'
+  f.read
 end
 
 get '/*' do
