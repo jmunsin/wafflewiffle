@@ -6,9 +6,7 @@ require 'RMagick'
 pvdir="/home/jm/code/photoviewer/data"
 
 def get_dirs(dir, sub)
-  if sub
-    dir += "/" + sub
-  end
+  dir += "/" + sub if sub
   listing = ""
   Dir.entries(dir).sort.each { |fn|
     if File.stat(dir + "/" + fn).directory?
@@ -24,9 +22,7 @@ def get_dirs(dir, sub)
 end
 
 def get_files(dir, sub)
-  if sub
-    dir += "/" + sub
-  end
+  dir += "/" + sub if sub
   listing = ""
   Dir.entries(dir).sort.each { |fn|
     if File.stat(dir + "/" + fn).file?
