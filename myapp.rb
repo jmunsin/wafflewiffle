@@ -1,9 +1,9 @@
 require 'rubygems'
 require 'sinatra'
 require 'bluecloth'
+require 'RMagick'
 
-pvdir="/home/jm/code/photoviewer/public"
-pvdatadir="/home/jm/code/photoviewer/data"
+pvdir="/home/jm/code/photoviewer/data"
 
 def get_dirs(dir, sub)
   if sub
@@ -48,14 +48,14 @@ get '/' do
   get_page(pvdir)
 end
 
-get '/data/*.jpg' do
-  f = File.open(pvdatadir + "/" + params["splat"].join("/") + ".jpg")
+get '/*.jpg' do
+  img = Magick::Image.read(pvdir + "/" + params["splat"].join("/") + ".jpg").first
+  img.resize!(0.1)
   content_type 'image/jpg'
-  f.read
+  img.to_blob { fileformat="JPEG" }
 end
 
 get '/*' do
-  p params["splat"]
   get_page(pvdir, params["splat"].join("/"))
 end
 
