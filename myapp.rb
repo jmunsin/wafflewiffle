@@ -41,9 +41,8 @@ def get_page(dir, sub=false)
 end
 
 def get_jpg(pvdir, params, suffix)
-  imgs = Magick::Image.read(pvdir + "/" + params["splat"].join("/") + suffix)
+  imgs = Magick::Image.read(pvdir + "/" + params["splat"].join("/") + suffix) { self.size = "270x" }
   img = imgs.first
-  img.resize!(0.1)
   content_type 'image/jpg'
   img.to_blob { fileformat="JPEG" }
 end
