@@ -2,8 +2,21 @@ require 'rubygems'
 require 'sinatra'
 require 'bluecloth'
 require 'RMagick'
+require 'dm-core'
 
 pvdir="/home/jm/code/photoviewer/data"
+
+class Picture
+  include DataMapper::Resource
+  property :id,         Serial
+  property :name,       String, :key => true
+  property :angle,      Float
+end
+
+configure do
+  DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/test.db")
+  Picture.auto_migrate!
+end
 
 def get_dirs(dir, sub)
   dir += "/" + sub if sub
