@@ -15,7 +15,7 @@ end
 
 configure do
   DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/test.db")
-  Picture.auto_migrate!
+  #Picture.auto_migrate!
 end
 
 def get_dirs(dir, sub)
@@ -56,6 +56,13 @@ end
 def get_jpg(pvdir, params, suffix)
   imgs = Magick::Image.read(pvdir + "/" + params["splat"].join("/") + suffix) { self.size = "270x" }
   img = imgs.first
+  pic = Picture.first(:name => params["splat"].join("/") + suffix)
+  if pic != nil and pic.angle != nil and pic.angle != 0
+    img.rotate!(pic.angle)
+  end
+  #pic = Picture.new(:name => params["splat"].join("/") + suffix)
+  #pic.angle=-90.0
+  #pic.save
   content_type 'image/jpg'
   img.to_blob { fileformat="JPEG" }
 end
