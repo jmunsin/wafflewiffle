@@ -43,6 +43,9 @@ def get_files(dir, sub)
         listing += "![#{sub}/#{fn}](#{sub}/#{fn})\n"
       else
         listing += "![#{fn}](#{fn})\n"
+        listing += "[<](#{fn}/rotate/l)\n"
+        listing += "[^](#{fn}/rotate/u)\n"
+        listing += "[>](#{fn}/rotate/r)\n"
       end
     end
   }
@@ -65,6 +68,10 @@ def get_jpg(pvdir, params, suffix)
   #pic.save
   content_type 'image/jpg'
   img.to_blob { fileformat="JPEG" }
+end
+
+get '/*/rotate/r' do
+  p "a"
 end
 
 get '/' do
