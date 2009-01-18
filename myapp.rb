@@ -41,11 +41,14 @@ def get_files(dir, sub)
     if File.stat(dir + "/" + fn).file?
       if sub
         listing += "![#{sub}/#{fn}](#{sub}/#{fn})\n"
+        listing += "[<](rotate?angle=-90&img=#{sub}/#{fn})\n"
+        listing += "[^](rotate?angle=180&img=#{sub}/#{fn})\n"
+        listing += "[>](rotate?angle=90&img=#{sub}/#{fn})\n"
       else
         listing += "![#{fn}](#{fn})\n"
-        listing += "[<](#{fn}/rotate/l)\n"
-        listing += "[^](#{fn}/rotate/u)\n"
-        listing += "[>](#{fn}/rotate/r)\n"
+        listing += "[<](rotate?angle=-90&img=#{fn})\n"
+        listing += "[^](rotate?angle=180&img=#{fn})\n"
+        listing += "[>](rotate?angle=90&img=#{fn})\n"
       end
     end
   }
@@ -70,8 +73,12 @@ def get_jpg(pvdir, params, suffix)
   img.to_blob { fileformat="JPEG" }
 end
 
-get '/*/rotate/r' do
-  p "a"
+get '/rotate' do
+  pic = Picture.first(:name => params["img"])
+  pic = Picture.new(:name => params["img"]) if pic == nil
+  pic.angle = 0 if pic.angle == nil
+  pic.angle += params[:angle].to_f
+  pic.save
 end
 
 get '/' do
