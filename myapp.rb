@@ -82,7 +82,16 @@ get '/rotate' do
 end
 
 get '/' do
-  get_page(pvdir)
+  str = ""
+  str += "<html>\n"
+  str += "<head>\n"
+  str += "<script type=\"text/javascript\" src=\"jquery-1.3.js\"></script>\n"
+  str += "<script type=\"text/javascript\">\n"
+  #str += "window.onload = function() { alert(\"welcome\"); }\n"
+  str += "</script>\n"
+  str += "</head>\n"
+  str += get_page(pvdir)
+  str += "</html>\n"
 end
 
 get '/*.jpg' do
