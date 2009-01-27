@@ -40,19 +40,32 @@ def get_files(dir, sub)
   Dir.entries(dir).sort.each { |fn|
     if File.stat(dir + "/" + fn).file?
       if sub
-        listing += "![#{sub}/#{fn}](#{sub}/#{fn})\n"
-        listing += "[<](rotate?angle=-90&img=#{sub}/#{fn})\n"
-        listing += "[^](rotate?angle=180&img=#{sub}/#{fn})\n"
-        listing += "[>](rotate?angle=90&img=#{sub}/#{fn})\n"
+#        l  = "![#{sub}/#{fn}](#{sub}/#{fn})\n"
+#        l += "[<](rotate?angle=-90&img=#{sub}/#{fn})\n"
+#        l += "[^](rotate?angle=180&img=#{sub}/#{fn})\n"
+#        l += "[>](rotate?angle=90&img=#{sub}/#{fn})\n"
+#        listing += BlueCloth.new(l).to_html
+        listing += "<img src=\"#{sub}/#{fn}\" name=\"#{sub}/#{fn.gsub(".", "").gsub("_", "")}\">"
+        listing += <<EOS1
+        <form>
+        <input type="button" value="<" onClick='rotateImage(\"#{sub}/#{fn}\", -90);'>
+        <input type="button" value="^" onClick='rotateImage(\"#{sub}/#{fn}\", 180);'>
+        <input type="button" value=">" onClick='rotateImage(\"#{sub}/#{fn}\", 90);'>
+        </form>
+EOS1
       else
-        listing += "![#{fn}](#{fn})\n"
-        listing += "[<](rotate?angle=-90&img=#{fn})\n"
-        listing += "[^](rotate?angle=180&img=#{fn})\n"
-        listing += "[>](rotate?angle=90&img=#{fn})\n"
+        listing += "<img src=\"#{fn}\" name=\"#{fn.gsub(".", "").gsub("_", "")}\">"
+        listing += <<EOS2
+        <form>
+        <input type="button" value="<" onClick='rotateImage(\"#{fn}\", -90);'>
+        <input type="button" value="^" onClick='rotateImage(\"#{fn}\", 180);'>
+        <input type="button" value=">" onClick='rotateImage(\"#{fn}\", 90);'>
+        </form>
+EOS2
       end
     end
   }
-  BlueCloth.new(listing).to_html
+  listing
 end
 
 def get_page(dir, sub=false)
@@ -66,9 +79,6 @@ def get_jpg(pvdir, params, suffix)
   if pic != nil and pic.angle != nil and pic.angle != 0
     img.rotate!(pic.angle)
   end
-  #pic = Picture.new(:name => params["splat"].join("/") + suffix)
-  #pic.angle=-90.0
-  #pic.save
   content_type 'image/jpg'
   img.to_blob { fileformat="JPEG" }
 end
@@ -87,7 +97,16 @@ get '/' do
   str += "<head>\n"
   str += "<script type=\"text/javascript\" src=\"jquery-1.3.js\"></script>\n"
   str += "<script type=\"text/javascript\">\n"
-  #str += "window.onload = function() { alert(\"welcome\"); }\n"
+  str += <<EOS
+    function rotateImage(image, degree) {
+        $.get("rotate", {angle: degree, img: image});
+        var now = new Date();
+        if (document.images) {
+          str = image.replace(/\\./, "").replace(/_/, "");
+          document.images[str].src = image + '?' + now.getTime();
+        }
+    }
+EOS
   str += "</script>\n"
   str += "</head>\n"
   str += get_page(pvdir)
