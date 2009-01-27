@@ -83,15 +83,7 @@ def get_jpg(pvdir, params, suffix)
   img.to_blob { fileformat="JPEG" }
 end
 
-get '/rotate' do
-  pic = Picture.first(:name => params["img"])
-  pic = Picture.new(:name => params["img"]) if pic == nil
-  pic.angle = 0 if pic.angle == nil
-  pic.angle += params[:angle].to_f
-  pic.save
-end
-
-get '/' do
+def get_javascript
   str = ""
   str += "<html>\n"
   str += "<head>\n"
@@ -109,6 +101,20 @@ get '/' do
 EOS
   str += "</script>\n"
   str += "</head>\n"
+
+  str
+end
+
+get '/rotate' do
+  pic = Picture.first(:name => params["img"])
+  pic = Picture.new(:name => params["img"]) if pic == nil
+  pic.angle = 0 if pic.angle == nil
+  pic.angle += params[:angle].to_f
+  pic.save
+end
+
+get '/' do
+  str = get_javascript
   str += get_page(pvdir)
   str += "</html>\n"
 end
@@ -122,6 +128,8 @@ get '/*.JPG' do
 end
 
 get '/*' do
-  get_page(pvdir, params["splat"].join("/"))
+  str = get_javascript
+  str += get_page(pvdir, params["splat"].join("/"))
+  str += "</html>\n"
 end
 
