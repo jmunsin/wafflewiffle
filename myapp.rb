@@ -40,11 +40,6 @@ def get_files(dir, sub)
   Dir.entries(dir).sort.each { |fn|
     if File.stat(dir + "/" + fn).file?
       if sub
-#        l  = "![#{sub}/#{fn}](#{sub}/#{fn})\n"
-#        l += "[<](rotate?angle=-90&img=#{sub}/#{fn})\n"
-#        l += "[^](rotate?angle=180&img=#{sub}/#{fn})\n"
-#        l += "[>](rotate?angle=90&img=#{sub}/#{fn})\n"
-#        listing += BlueCloth.new(l).to_html
         listing += "<img src=\"#{sub}/#{fn}\" name=\"#{sub}/#{fn.gsub(".", "").gsub("_", "")}\">"
         listing += <<EOS1
         <form>
