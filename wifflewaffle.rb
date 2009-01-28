@@ -4,7 +4,7 @@ require 'bluecloth'
 require 'RMagick'
 require 'dm-core'
 
-pvdir="/home/jm/code/photoviewer/data"
+pvdir="data"
 
 class Picture
   include DataMapper::Resource
