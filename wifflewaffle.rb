@@ -25,7 +25,11 @@ def get_dirs(dir, sub)
     if File.stat(dir + "/" + fn).directory?
       if fn != "."
         if fn != ".."
-          listing += "* [#{fn}](#{fn})\n"
+          if sub
+            listing += "* [#{fn}](#{sub}/#{fn})\n"
+          else
+            listing += "* [#{fn}](#{fn})\n"
+          end
         else
         end
       end
@@ -40,7 +44,7 @@ def get_files(dir, sub)
   Dir.entries(dir).sort.each { |fn|
     if File.stat(dir + "/" + fn).file?
       if sub
-        listing += "<img src=\"#{sub}/#{fn}\" name=\"#{sub}/#{fn.gsub(".", "").gsub("_", "")}\">"
+        listing += "<img src=\"/#{sub}/#{fn}\" name=\"#{sub}/#{fn.gsub(".", "").gsub("_", "")}\">"
         listing += <<EOS1
         <form>
         <input type="button" value="<" onClick='rotateImage(\"#{sub}/#{fn}\", -90);'>
@@ -82,7 +86,7 @@ def get_javascript
   str = ""
   str += "<html>\n"
   str += "<head>\n"
-  str += "<script type=\"text/javascript\" src=\"jquery-1.3.js\"></script>\n"
+  str += "<script type=\"text/javascript\" src=\"/jquery-1.3.js\"></script>\n"
   str += "<script type=\"text/javascript\">\n"
   str += <<EOS
     function rotateImage(image, degree) {
@@ -90,7 +94,7 @@ def get_javascript
         var now = new Date();
         if (document.images) {
           str = image.replace(/\\./, "").replace(/_/, "");
-          document.images[str].src = image + '?' + now.getTime();
+          document.images[str].src = "/" + image + '?' + now.getTime();
         }
     }
 EOS
@@ -100,12 +104,20 @@ EOS
   str
 end
 
-get '/rotate' do
+def rotate(params)
   pic = Picture.first(:name => params["img"])
   pic = Picture.new(:name => params["img"]) if pic == nil
   pic.angle = 0 if pic.angle == nil
   pic.angle += params[:angle].to_f
   pic.save
+end
+
+get '/*/rotate' do
+  rotate(params)
+end
+
+get '/rotate' do
+  rotate(params)
 end
 
 get '/' do
