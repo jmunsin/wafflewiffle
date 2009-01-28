@@ -18,5 +18,5 @@ But I still need to:
 * rotate
 * what else?
 
-This is what wifflewaffle does.
+This is what wafflewiffle does.
 
