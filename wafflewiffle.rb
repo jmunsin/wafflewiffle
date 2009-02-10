@@ -4,7 +4,7 @@ require 'bluecloth'
 require 'RMagick'
 require 'dm-core'
 
-# wifflewaffle (c) Jonas Munsin (jmunsin@gmail.com)
+# wafflewiffle (c) Jonas Munsin (jmunsin@gmail.com)
 # released under GPLv3 or later
 
 pvdir="data"
