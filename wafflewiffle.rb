@@ -137,6 +137,10 @@ get '/*.JPG' do
   get_jpg(pvdir, params, ".JPG")
 end
 
+get '/favicon.ico' do
+  nil
+end
+
 get '/*' do
   str = get_javascript
   str += get_page(pvdir, params["splat"].join("/"))
