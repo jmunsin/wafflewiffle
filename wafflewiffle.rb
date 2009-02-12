@@ -19,6 +19,8 @@ end
 configure do
   DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/test.db")
   #Picture.auto_migrate!
+  Picture.auto_upgrade!
+#  DataMapper::Logger.new(STDOUT, :debug)
 end
 
 def get_dirs(dir, sub)
