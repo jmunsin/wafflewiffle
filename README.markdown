@@ -1,3 +1,6 @@
+sinatrabugworaround:
+start with RACK_ENV=test
+
 Problem to solve
 ================
 
