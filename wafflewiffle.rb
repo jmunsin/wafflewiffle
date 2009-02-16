@@ -144,7 +144,7 @@ get '/favicon.ico' do
   nil
 end
 
-get '/*.html' do
+get '/*' do
   str = get_javascript
   str += get_page(pvdir, params["splat"].join("/"))
   str += "</html>\n"
