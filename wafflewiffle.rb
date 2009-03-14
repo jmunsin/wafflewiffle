@@ -7,7 +7,7 @@ require 'dm-core'
 # wafflewiffle (c) Jonas Munsin (jmunsin@gmail.com)
 # released under GPLv3 or later
 
-pvdir="data"
+pvdir="wafflewiffle"
 
 class Picture
   include DataMapper::Resource
