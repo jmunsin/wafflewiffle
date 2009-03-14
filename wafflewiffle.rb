@@ -50,7 +50,9 @@ def get_files(dir, sub)
   Dir.entries(dir).sort.each { |fn|
     if File.stat(dir + "/" + fn).file?
       if sub
-        listing += "<img src=\"/#{sub}/#{fn}\" name=\"#{sub}/#{fn.gsub(".", "").gsub("_", "")}\">"
+        listing += "<a href=\"/#{sub}/#{fn}?size=normal\">"
+        listing += "<img src=\"/#{sub}/#{fn}?size=thumb\" name=\"#{sub}/#{fn.gsub(".", "").gsub("_", "")}\">"
+        listing += "</a>"
         listing += <<EOS1
         <form>
         <input type="button" value="<" onClick='rotateImage(\"#{sub}/#{fn}\", -90);'>
@@ -59,7 +61,9 @@ def get_files(dir, sub)
         </form>
 EOS1
       else
-        listing += "<img src=\"#{fn}\" name=\"#{fn.gsub(".", "").gsub("_", "")}\">"
+        listing += "<a href=\"/#{fn}?size=normal\">"
+        listing += "<img src=\"#{fn}?size=thumb\" name=\"#{fn.gsub(".", "").gsub("_", "")}\">"
+        listing += "</a>"
         listing += <<EOS2
         <form>
         <input type="button" value="<" onClick='rotateImage(\"#{fn}\", -90);'>
@@ -78,8 +82,19 @@ def get_page(dir, sub=false)
 end
 
 def get_jpg(pvdir, params, suffix)
-  imgs = Magick::Image.read(pvdir + "/" + params["splat"].join("/") + suffix) { self.size = "270x" }
-  img = imgs.first
+  img = nil
+  if params["size"] == "thumb"
+    imgs = Magick::Image.read(pvdir + "/" + params["splat"].join("/") + suffix) { self.size = "270x" }
+    img = imgs.first
+  else
+    imgs = Magick::Image.read(pvdir + "/" + params["splat"].join("/") + suffix)
+    img = imgs.first
+    if params["size"] == "normal"
+      img.change_geometry("1024x") { |c, r|
+        img.resize!(c, r)
+      }
+    end
+  end
   pic = Picture.first(:name => params["splat"].join("/") + suffix)
   if pic != nil and pic.angle != nil and pic.angle != 0
     img.rotate!(pic.angle)
