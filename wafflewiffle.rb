@@ -7,7 +7,7 @@ require 'dm-core'
 # wafflewiffle (c) Jonas Munsin (jmunsin@gmail.com)
 # released under GPLv3 or later
 
-pvdir="wafflewiffle"
+pvdir="data"
 
 class Picture
   include DataMapper::Resource
@@ -15,6 +15,10 @@ class Picture
   property :name,       String, :key => true
   property :angle,      Float
 end
+
+#use Rack::Auth::Basic do |username, password|
+#    [username, password] == ['test', 'test']
+#end
 
 configure do
   DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/test.db")
