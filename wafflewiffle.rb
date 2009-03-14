@@ -100,7 +100,7 @@ def get_javascript
         var now = new Date();
         if (document.images) {
           str = image.replace(/\\./, "").replace(/_/, "");
-          document.images[str].src = "/" + image + '?' + now.getTime();
+          document.images[str].src = "/" + image + '?unique=' + now.getTime();
         }
     }
 EOS
