@@ -50,8 +50,8 @@ def get_files(dir, sub)
   Dir.entries(dir).sort.each { |fn|
     if File.stat(dir + "/" + fn).file?
       if sub
-        listing += "<a href=\"/#{sub}/#{fn}?size=normal\">"
-        listing += "<img src=\"/#{sub}/#{fn}?size=thumb\" name=\"#{sub}/#{fn.gsub(".", "").gsub("_", "")}\">"
+        listing += "<a href=\"/wafflewiffle/#{sub}/#{fn}?size=normal\">"
+        listing += "<img src=\"/wafflewiffle/#{sub}/#{fn}?size=thumb\" name=\"#{sub}/#{fn.gsub(".", "").gsub("_", "")}\">"
         listing += "</a>"
         listing += <<EOS1
         <form>
@@ -61,8 +61,8 @@ def get_files(dir, sub)
         </form>
 EOS1
       else
-        listing += "<a href=\"/#{fn}?size=normal\">"
-        listing += "<img src=\"#{fn}?size=thumb\" name=\"#{fn.gsub(".", "").gsub("_", "")}\">"
+        listing += "<a href=\"/wafflewiffle/#{fn}?size=normal\">"
+        listing += "<img src=\"/wafflewiffle/#{fn}?size=thumb\" name=\"#{fn.gsub(".", "").gsub("_", "")}\">"
         listing += "</a>"
         listing += <<EOS2
         <form>
@@ -107,7 +107,7 @@ def get_javascript
   str = ""
   str += "<html>\n"
   str += "<head>\n"
-  str += "<script type=\"text/javascript\" src=\"/jquery-1.3.js\"></script>\n"
+  str += "<script type=\"text/javascript\" src=\"/wafflewiffle/jquery-1.3.js\"></script>\n"
   str += "<script type=\"text/javascript\">\n"
   str += <<EOS
     function rotateImage(image, degree) {
@@ -115,7 +115,7 @@ def get_javascript
         var now = new Date();
         if (document.images) {
           str = image.replace(/\\./, "").replace(/_/, "");
-          document.images[str].src = "/" + image + '?unique=' + now.getTime();
+          document.images[str].src = "/wafflewiffle/" + image + "?unique=" + now.getTime() + "&size=thumb" ;
         }
     }
 EOS
@@ -133,35 +133,43 @@ def rotate(params)
   pic.save
 end
 
-get '/*/rotate' do
+get '/wafflewiffle/jquery-1.3.js' do
+  File.read("public/jquery-1.3.js")
+end
+
+get '/wafflewiffle/*/rotate' do
   rotate(params)
 end
 
-get '/rotate' do
+get '/wafflewiffle/rotate' do
   rotate(params)
 end
 
-get '/' do
+get '/wafflewiffle/' do
   str = get_javascript
   str += get_page(pvdir)
   str += "</html>\n"
 end
 
-get '/*.jpg' do
+get '/wafflewiffle/*.jpg' do
   get_jpg(pvdir, params, ".jpg")
 end
 
-get '/*.JPG' do
+get '/wafflewiffle/*.JPG' do
   get_jpg(pvdir, params, ".JPG")
 end
 
-get '/favicon.ico' do
+get '/wafflewiffle/favicon.ico' do
   nil
 end
 
-get '/*' do
+get '/wafflewiffle/*' do
   str = get_javascript
   str += get_page(pvdir, params["splat"].join("/"))
   str += "</html>\n"
+end
+
+get '/' do
+  redirect '/wafflewiffle/'
 end
 
