@@ -177,3 +177,7 @@ get '/' do
   redirect '/wafflewiffle/'
 end
 
+get '/wafflewiffle' do
+  redirect '/wafflewiffle/'
+end
+
