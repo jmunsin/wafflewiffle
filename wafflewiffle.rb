@@ -29,16 +29,17 @@ configure do
 end
 
 def get_dirs(dir, sub)
-  dir += "/" + sub if sub
+  dir = ""
+  dir = "/" + sub if sub
   listing = ""
-  Dir.entries(dir).sort.each { |fn|
-    if File.stat(dir + "/" + fn).directory?
+  Dir.entries("wafflewiffle" + dir).sort.each { |fn|
+    if File.stat("wafflewiffle" + dir + "/" + fn).directory?
       if fn != "."
         if fn != ".."
           if sub
-            listing += "* [#{fn}](#{sub}/#{fn})\n"
+            listing += "* [#{fn}](/wafflewiffle#{dir}/#{fn})\n"
           else
-            listing += "* [#{fn}](#{fn})\n"
+            listing += "* [#{fn}](/wafflewiffle/#{fn})\n"
           end
         else
         end
