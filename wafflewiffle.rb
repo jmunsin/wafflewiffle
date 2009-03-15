@@ -56,7 +56,7 @@ def get_files(dir, sub)
     if File.stat(dir + "/" + fn).file?
       if sub
         listing += "<a href=\"/wafflewiffle/#{sub}/#{fn}?size=normal\">"
-        listing += "<img src=\"/wafflewiffle/#{sub}/#{fn}?size=thumb\" name=\"#{sub}/#{fn.gsub(".", "").gsub("_", "")}\">"
+        listing += "<img src=\"/wafflewiffle/#{sub}/#{fn}?size=thumb\" name=\"#{sub.gsub(".", "").gsub("_", "")}/#{fn.gsub(".", "").gsub("_", "")}\">"
         listing += "</a>"
         listing += <<EOS1
         <form>
@@ -119,7 +119,7 @@ def get_javascript
         $.get("rotate", {angle: degree, img: image});
         var now = new Date();
         if (document.images) {
-          str = image.replace(/\\./, "").replace(/_/, "");
+          str = image.replace(/\\./g, "").replace(/_/g, "");
           document.images[str].src = "/wafflewiffle/" + image + "?unique=" + now.getTime() + "&size=thumb" ;
         }
     }
